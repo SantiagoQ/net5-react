@@ -1,2 +1,2 @@
-# testing
-Testing ideas and frameworks
+# net5-react
+Base app for net5 and React.
