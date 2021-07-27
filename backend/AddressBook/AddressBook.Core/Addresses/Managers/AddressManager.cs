@@ -45,9 +45,9 @@ namespace AddressBook.Core.Addresses.Managers
         /// <summary>
         /// Deletes address and executes related bussiness logic
         /// </summary>
-        public async Task DeleteAddress(int id)
+        public async Task DeleteAddress(DeleteDto dto)
         {
-            var registry = await _addressRepository.GetByIdAsync(id);
+            var registry = await _addressRepository.GetByIdAsync(dto.Id);
             if (registry == null)
             {
                 throw new Exception("The address to delete doesn't exist.");
@@ -65,7 +65,7 @@ namespace AddressBook.Core.Addresses.Managers
             {
                 throw new Exception("The requested address doesn't exist.");
             }
-            //If the dto that the client sees needs data from other services. They should be called here
+            //If the dto that the client sees needs data from other services. They should be called here before mapping
             var dto =  _mapper.Map<Address, AddressDto>(registry);
             return dto;
         }
@@ -76,8 +76,11 @@ namespace AddressBook.Core.Addresses.Managers
         public async Task<IEnumerable<AddressDto>> GetAddresses()
         {
             var registries = await _addressRepository.GetAllAsync();
-            //If the dto that the client sees needs data from other services. They should be called here
+            //If the dto that the client sees needs data from other services. They should be called here before mapping
             var dto = _mapper.Map<IEnumerable<Address>, IEnumerable<AddressDto>>(registries);
+
+            //The user should see the addresses order by FirstName
+            dto = dto.OrderBy(a => a.FirstName);
             return dto;
         }
 
@@ -90,7 +93,8 @@ namespace AddressBook.Core.Addresses.Managers
                 dto.CompanyName, dto.Email, dto.Phone);
 
             var current = await _addressRepository.GetByIdAsync(dto.Id);
-
+            current.Update(dto.FirstName, dto.LastName,
+                dto.CompanyName, dto.Email, dto.Phone);
             if(current == null)
             {
                 throw new Exception("The updated address doesn't exist.");
@@ -102,16 +106,16 @@ namespace AddressBook.Core.Addresses.Managers
         /// <summary>
         /// Validates the fields of address
         /// </summary>
-        private void ValidateFields(string firstName, string lastName,
+        public void ValidateFields(string firstName, string lastName,
             string company, string email, long phone)
         {
             /* Validates that only letters are in names. Could be changed if needed, there is no real reason 
              except having some kind of validation of regex*/
-            if (!Regex.Match(firstName, "^[A-Z][a-zA-Z]*$").Success && firstName.Length > 30)
+            if (!Regex.Match(firstName, @"^[a-zA-Z]+$").Success || firstName.Length > 30)
             {
                 throw new Exception("The format of the first name isn't valid.");
             }
-            if (!Regex.Match(lastName, "^[A-Z][a-zA-Z]*$").Success && lastName.Length > 30)
+            if (!Regex.Match(lastName, @"^[a-zA-Z]+$").Success || lastName.Length > 30)
             {
                 throw new Exception("The format of the last name isn't valid.");
             }
@@ -121,18 +125,20 @@ namespace AddressBook.Core.Addresses.Managers
                 throw new Exception("The length of the company name isn't valid.");
             }
             //Validates that email has email format
+            Exception excEmail = new Exception("The format of the email address isn't valid.");
             try
             {
                 MailAddress mail = new MailAddress(email);
+                if (mail.Address != email) throw excEmail;
             }
             catch
             {
-                throw new Exception("The format of the email address isn't valid.");
+                throw excEmail;
             }
             //Validates phone number max length 12/ min length 7
-            if(phone < 1000000 || phone > 999999999)
+            if(phone < 1000000 || phone > 999999999999)
             {
-                throw new Exception("The format of the email address isn't valid.");
+                throw new Exception("The format of the phone isn't valid.");
             }
         }
     }

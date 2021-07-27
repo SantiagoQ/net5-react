@@ -22,5 +22,25 @@ namespace AddressBook.API.Controllers
         {
             return new JsonResult(await _addressManager.GetAddresses());
         }
+        [HttpGet("all")]
+        public async Task<JsonResult> Get(int id)
+        {
+            return new JsonResult(await _addressManager.GetAddress(id));
+        }
+        [HttpPost("create")]
+        public async Task Create(CreateAddressDto dto)
+        {
+            await _addressManager.CreateAddress(dto);
+        }
+        [HttpPost("update")]
+        public async Task Update(UpdateAddressDto dto)
+        {
+            await _addressManager.UpdateAddress(dto);
+        }
+        [HttpPost("delete")]
+        public async Task Delete(DeleteDto dto)
+        {
+            await _addressManager.DeleteAddress(dto);
+        }
     }
 }

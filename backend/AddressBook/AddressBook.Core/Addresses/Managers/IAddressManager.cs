@@ -13,6 +13,6 @@ namespace AddressBook.Core.Addresses.Managers
         Task UpdateAddress(UpdateAddressDto dto);
         Task<AddressDto> GetAddress(int id);
         Task<IEnumerable<AddressDto>> GetAddresses();
-        Task DeleteAddress(int id);
+        Task DeleteAddress(DeleteDto dto);
     }
 }

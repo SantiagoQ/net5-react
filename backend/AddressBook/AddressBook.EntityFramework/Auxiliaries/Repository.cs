@@ -1,5 +1,6 @@
 ﻿using AddressBook.Core.Auxiliaries.Entities;
 using AddressBook.Core.Auxiliaries.Repositories;
+using AddressBook.EntityFramework.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,14 @@ namespace AddressBook.EntityFramework.Auxiliaries
     public class Repository<TEntity> : IRepository<TEntity>
          where TEntity : class, IEntity, new()
     {
-        protected readonly DbContext _context;
+        protected readonly AddressBookContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
         /// <summary>
         /// Constructor that uses the context with the database connection to the object
         /// </summary>
         /// <param name="context"></param>
-        public Repository(DbContext context)
+        public Repository(AddressBookContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();

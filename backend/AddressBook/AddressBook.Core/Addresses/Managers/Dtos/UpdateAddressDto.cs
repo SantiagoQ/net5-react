@@ -14,5 +14,15 @@ namespace AddressBook.Core.Addresses.Managers.Dtos
         public string CompanyName { get; set; }
         public string Email { get; set; }
         public long Phone { get; set; }
+        public UpdateAddressDto(int id, string firstName, string lastName,
+            string company, string email, long phone)
+        {
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+            CompanyName = company;
+            Email = email;
+            Phone = phone;
+        }
     }
 }

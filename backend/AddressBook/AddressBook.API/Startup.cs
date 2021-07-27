@@ -18,6 +18,9 @@ using AddressBook.Core.Auxiliaries.Repositories;
 using AddressBook.EntityFramework.Auxiliaries;
 using AddressBook.Core.Auxiliaries.Entities;
 using AddressBook.Core.Addresses.Entities;
+using AutoMapper;
+using AddressBook.Core.Addresses.Managers.Dtos;
+using AddressBook.API.Utils.Automapper;
 
 namespace AddressBook.API
 {
@@ -42,8 +45,12 @@ namespace AddressBook.API
                 options.UseSqlServer(Configuration.GetConnectionString("AddressBookContext")));
 
             //DI
-            services.AddSingleton<IRepository<Address>, Repository<Address>>();
+            services.AddTransient<IRepository<Address>, Repository<Address>>();
             services.AddTransient<IAddressManager, AddressManager>();
+
+
+            //Automapper
+            services.AddAutoMapper(typeof(AddressProfile));
 
             //CORS
             //var allowCors = Configuration.GetSection("AppOptions")["Cors"].Split(",").ToArray();
