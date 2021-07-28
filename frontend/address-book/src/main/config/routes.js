@@ -1,4 +1,5 @@
-import Utils from "src/auxiliaries/Utils";
+import Utils from "../../auxiliaries/Utils";
+import { Redirect } from 'react-router-dom';
 
 const routeConfigs = [
 

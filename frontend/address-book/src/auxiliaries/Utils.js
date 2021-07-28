@@ -1,4 +1,4 @@
-class Utils {
+export default class Utils {
     static setRoutes(config, defaultAuth) {
         let routes = [...config.routes];
 
