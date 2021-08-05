@@ -1,17 +1,10 @@
-import IniciativasView from './IniciativasView';
-import { authRoles } from 'app/@theme/auth';
+import ContactsView from './ContactsView';
 
 export const ContactsConfig = {
-    settings: {
-        layout: {
-            config: {}
-        }
-    },
-    auth: authRoles.adminHerramientas,
     routes: [
         {
-            path: '/herramientas/iniciativas',
-            component: IniciativasView,
+            path: '/contacts',
+            component: ContactsView,
             exact: true
         }
     ]

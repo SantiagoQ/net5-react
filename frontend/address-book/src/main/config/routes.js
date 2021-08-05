@@ -1,8 +1,9 @@
 import Utils from "../../auxiliaries/Utils";
 import { Redirect } from 'react-router-dom';
+import { ContactsConfig } from "../contacts/ContactsConfig";
 
 const routeConfigs = [
-
+    ContactsConfig
 ];
 
 const routes = [
